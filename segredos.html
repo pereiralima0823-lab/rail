@@ -226,15 +226,28 @@
     border-bottom: 1px solid var(--border);
   }
   .editor-title { font-family: 'Cinzel', serif; font-size: 16px; color: var(--gold); letter-spacing: 0.5px; }
-  .page-dots { display: flex; gap: 5px; margin-left: auto; }
-  .page-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--border);
-    border: 1px solid var(--border2);
-    transition: all 0.2s;
+  .page-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 1.25rem; }
+  .page-tab {
+    flex: 1; min-width: 70px; text-align: center;
+    padding: 8px 6px; font-family: 'Cinzel', serif; font-size: 11px;
+    letter-spacing: 0.4px; color: var(--text3); background: var(--bg2);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    cursor: pointer; transition: all 0.18s;
   }
-  .page-dot.active { background: var(--gold-dim); border-color: var(--gold); }
+  .page-tab:hover { border-color: var(--gold-dim); color: var(--gold); }
+  .page-tab.active { background: var(--bg3); border-color: var(--gold-dim); color: var(--gold); }
+
+  .foto-wrap { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .foto-preview {
+    width: 76px; height: 76px; border-radius: 50%; flex-shrink: 0;
+    background: var(--bg2); border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; font-size: 26px; color: var(--gold-dim);
+  }
+  .foto-preview img { width: 100%; height: 100%; object-fit: cover; }
+  .foto-actions { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .foto-btn-row { display: flex; gap: 6px; }
+  .foto-btn-row button { flex: 1; font-size: 12px; padding: 6px 8px; }
 
   .field-group { display: flex; flex-direction: column; gap: 4px; }
   .field-label { font-family: 'Cinzel', serif; font-size: 10px; color: var(--text3); letter-spacing: 0.8px; text-transform: uppercase; }
@@ -292,11 +305,13 @@
   tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
   tbody tr:last-child { border-bottom: none; }
   tbody tr:hover { background: var(--bg3); }
-  tbody td { padding: 3px 4px; }
-  tbody td input {
-    border: none; background: transparent; font-size: 14px; padding: 5px 6px; border-radius: 4px;
+  tbody td { padding: 4px; vertical-align: top; }
+  tbody td input, tbody td textarea {
+    border: none; background: transparent; font-size: 14px; padding: 8px 6px; border-radius: 4px;
+    font-family: 'Crimson Text', Georgia, serif; width: 100%; resize: vertical;
+    min-height: 44px; line-height: 1.4;
   }
-  tbody td input:focus { background: var(--bg3); border: 1px solid var(--border2); }
+  tbody td input:focus, tbody td textarea:focus { background: var(--bg3); border: 1px solid var(--border2); }
   tbody td:last-child { width: 36px; text-align: center; }
 
   #toast {
@@ -372,9 +387,24 @@
     <div class="editor-header">
       <button class="btn-icon" onclick="goHome()">←</button>
       <span class="editor-title">Dados do Segredo</span>
-      <div class="page-dots">
-        <div class="page-dot active"></div><div class="page-dot"></div>
-        <div class="page-dot"></div><div class="page-dot"></div>
+    </div>
+
+    <div class="page-tabs">
+      <div class="page-tab active" onclick="goPage(1)">📋 Dados</div>
+      <div class="page-tab" onclick="goPage(2)">⭐ Perícias</div>
+      <div class="page-tab" onclick="goPage(3)">🎒 Itens</div>
+      <div class="page-tab" onclick="goPage(4)">✨ Habilidades</div>
+    </div>
+
+    <div class="foto-wrap">
+      <div class="foto-preview" id="fotoPreview">👤</div>
+      <div class="foto-actions">
+        <label class="field-label">Foto</label>
+        <div class="foto-btn-row">
+          <button type="button" onclick="document.getElementById('f_foto_input').click()">📷 Escolher da galeria</button>
+          <button type="button" class="btn-danger" onclick="removerFoto()">Remover</button>
+        </div>
+        <input type="file" id="f_foto_input" accept="image/*" style="display:none" onchange="onFotoSelecionada(event)">
       </div>
     </div>
 
@@ -426,10 +456,13 @@
     <div class="editor-header">
       <button class="btn-icon" onclick="goHome()">←</button>
       <span class="editor-title">Perícias e Classes</span>
-      <div class="page-dots">
-        <div class="page-dot"></div><div class="page-dot active"></div>
-        <div class="page-dot"></div><div class="page-dot"></div>
-      </div>
+    </div>
+
+    <div class="page-tabs">
+      <div class="page-tab" onclick="goPage(1)">📋 Dados</div>
+      <div class="page-tab active" onclick="goPage(2)">⭐ Perícias</div>
+      <div class="page-tab" onclick="goPage(3)">🎒 Itens</div>
+      <div class="page-tab" onclick="goPage(4)">✨ Habilidades</div>
     </div>
     <div class="card-section">
       <div class="card-section-title" style="margin-bottom:10px">Perícias e Classes</div>
@@ -469,10 +502,13 @@
     <div class="editor-header">
       <button class="btn-icon" onclick="goHome()">←</button>
       <span class="editor-title">Itens</span>
-      <div class="page-dots">
-        <div class="page-dot"></div><div class="page-dot"></div>
-        <div class="page-dot active"></div><div class="page-dot"></div>
-      </div>
+    </div>
+
+    <div class="page-tabs">
+      <div class="page-tab" onclick="goPage(1)">📋 Dados</div>
+      <div class="page-tab" onclick="goPage(2)">⭐ Perícias</div>
+      <div class="page-tab active" onclick="goPage(3)">🎒 Itens</div>
+      <div class="page-tab" onclick="goPage(4)">✨ Habilidades</div>
     </div>
     <div class="table-wrap">
       <table>
@@ -494,10 +530,13 @@
     <div class="editor-header">
       <button class="btn-icon" onclick="goHome()">←</button>
       <span class="editor-title">Habilidades</span>
-      <div class="page-dots">
-        <div class="page-dot"></div><div class="page-dot"></div>
-        <div class="page-dot"></div><div class="page-dot active"></div>
-      </div>
+    </div>
+
+    <div class="page-tabs">
+      <div class="page-tab" onclick="goPage(1)">📋 Dados</div>
+      <div class="page-tab" onclick="goPage(2)">⭐ Perícias</div>
+      <div class="page-tab" onclick="goPage(3)">🎒 Itens</div>
+      <div class="page-tab active" onclick="goPage(4)">✨ Habilidades</div>
     </div>
     <div class="table-wrap">
       <table>
@@ -615,6 +654,8 @@ function loadFichaToForm(f) {
   v('f_combate', f.combate); v('f_caminho', f.caminho); v('f_stamina', f.stamina);
   v('f_classe', f.classe); v('f_classe2', f.classe2);
   v('f_pericia', f.pericia); v('f_raca', f.raca);
+  fotoAtual = f.foto || '';
+  atualizarFotoPreview();
   const ef = document.getElementById('extraFields');
   ef.innerHTML = '';
   (f.extraFields || []).forEach(r => addExtraField(r));
@@ -625,6 +666,37 @@ function loadFichaToForm(f) {
   applyReadonly();
 }
 
+// ── FOTO ──
+let fotoAtual = '';
+
+function atualizarFotoPreview() {
+  const prev = document.getElementById('fotoPreview');
+  if (!prev) return;
+  prev.innerHTML = fotoAtual ? `<img src="${fotoAtual}" alt="Foto">` : '👤';
+}
+
+function onFotoSelecionada(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (file.size > 1.5 * 1024 * 1024) {
+    showToast('Imagem muito grande! Use uma menor que 1.5MB.');
+    event.target.value = '';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => { fotoAtual = e.target.result; atualizarFotoPreview(); };
+  reader.readAsDataURL(file);
+}
+window.onFotoSelecionada = onFotoSelecionada;
+
+function removerFoto() {
+  fotoAtual = '';
+  atualizarFotoPreview();
+  const input = document.getElementById('f_foto_input');
+  if (input) input.value = '';
+}
+window.removerFoto = removerFoto;
+
 function readFichaFromForm() {
   const v = id => (document.getElementById(id) || {}).value || '';
   const extraFields = [];
@@ -634,11 +706,11 @@ function readFichaFromForm() {
   const especiais = [...document.querySelectorAll('#especiais input')].map(i => i.value);
   const supremas  = [...document.querySelectorAll('#supremas input')].map(i => i.value);
   const itens = [...document.querySelectorAll('#itensBody tr')].map(tr => {
-    const ins = tr.querySelectorAll('input');
+    const ins = tr.querySelectorAll('input, textarea');
     return { nome: ins[0]?.value||'', qtd: ins[1]?.value||'', desc: ins[2]?.value||'' };
   });
   const habilidades = [...document.querySelectorAll('#habilidadesBody tr')].map(tr => {
-    const ins = tr.querySelectorAll('input');
+    const ins = tr.querySelectorAll('input, textarea');
     return { nome: ins[0]?.value||'', tipo: ins[1]?.value||'', efeito: ins[2]?.value||'' };
   });
   return {
@@ -651,7 +723,8 @@ function readFichaFromForm() {
     combate: +v('f_combate'), caminho: v('f_caminho'), stamina: +v('f_stamina'),
     extraFields, classe: v('f_classe'), classe2: v('f_classe2'),
     pericia: v('f_pericia'), raca: v('f_raca'),
-    especiais, supremas, itens, habilidades
+    especiais, supremas, itens, habilidades,
+    foto: fotoAtual || ''
   };
 }
 
@@ -716,9 +789,10 @@ function renderHome() {
   empty.style.display = 'none';
   list.innerHTML = fichas.map(f => {
     const initials = (f.nome||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+    const avatarContent = f.foto ? `<img src="${f.foto}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : esc(initials);
     return `<div class="ficha-item">
       <div class="ficha-item-left">
-        <div class="ficha-avatar">${esc(initials)}</div>
+        <div class="ficha-avatar">${avatarContent}</div>
         <div>
           <div class="ficha-name">${esc(f.nome)}</div>
           <div class="ficha-meta">LVL ${f.lvl||0}${f.caminho?' · '+esc(f.caminho):''}${f.raca?' · '+esc(f.raca):''}</div>
@@ -726,7 +800,7 @@ function renderHome() {
       </div>
       <div class="ficha-actions">
         <button class="btn-icon" onclick="editFicha('${f.id}')" title="Editar">✏️</button>
-        <button class="btn-icon" onclick="promoverParaNpcs('${f.id}')" title="Mover para NPCs" style="color:#888888;border-color:transparent" title="Mover para NPCs (jogadores verão)">👥→</button>
+        <button class="btn-icon" onclick="promoverParaNpcs('${f.id}')" title="Mover para NPCs (jogadores verão)" style="color:#888888;border-color:transparent">👥→</button>
         <button class="btn-icon btn-danger" onclick="deleteFicha('${f.id}')" title="Excluir">🗑</button>
       </div>
     </div>`;
@@ -771,9 +845,9 @@ function renderPerks(listId, vals) {
 function addItem() {
   const tr = document.createElement('tr');
   tr.innerHTML = `
-    <td><input type="text" placeholder="Nome do item"></td>
+    <td><textarea rows="2" placeholder="Nome do item"></textarea></td>
     <td><input type="text" placeholder="1"></td>
-    <td><input type="text" placeholder="Descrição"></td>
+    <td><textarea rows="2" placeholder="Descrição"></textarea></td>
     <td><button class="btn-icon btn-danger" onclick="this.closest('tr').remove()">×</button></td>`;
   document.getElementById('itensBody').appendChild(tr);
 }
@@ -782,9 +856,9 @@ window.addItem = addItem;
 function addHabilidade() {
   const tr = document.createElement('tr');
   tr.innerHTML = `
-    <td><input type="text" placeholder="Nome"></td>
-    <td><input type="text" placeholder="Tipo"></td>
-    <td><input type="text" placeholder="Efeito / descrição"></td>
+    <td><textarea rows="2" placeholder="Nome"></textarea></td>
+    <td><textarea rows="2" placeholder="Tipo"></textarea></td>
+    <td><textarea rows="2" placeholder="Efeito / descrição"></textarea></td>
     <td><button class="btn-icon btn-danger" onclick="this.closest('tr').remove()">×</button></td>`;
   document.getElementById('habilidadesBody').appendChild(tr);
 }
@@ -796,7 +870,7 @@ function renderTableRows(tbodyId, rows, keys, placeholders) {
   rows.forEach(r => {
     const tr = document.createElement('tr');
     tr.innerHTML = keys.map((k,i) =>
-      `<td><input type="text" value="${esc(r[k]||'')}" placeholder="${placeholders[i]}"></td>`
+      `<td><textarea rows="2" placeholder="${placeholders[i]}">${esc(r[k]||'')}</textarea></td>`
     ).join('') +
     `<td><button class="btn-icon btn-danger" onclick="this.closest('tr').remove()">×</button></td>`;
     tbody.appendChild(tr);
